@@ -1,0 +1,44 @@
+@font-face {
+  font-family: 'NexaRustSlab-BlackShadow01-Free';
+  src: url('NexaRustSlab-BlackShadow01-Free-webfont.woff2') format('woff2'),
+    url('NexaRustSlab-BlackShadow01-Free-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+bold {
+  /*font-family: 'Bowlby One', cursive;*/
+  font-family: 'NexaRustSlab-BlackShadow01-Free';
+  font-size: 8rem;
+}
+thin {
+  /*font-family: 'Quicksand', sans-serif;*/
+  font-family: 'Raleway', sans-serif;
+  font-size: 5rem;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.title span {
+  margin: 1rem;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  margin: 1rem;
+}
+
+.control {
+  display: flex;
+  justify-content: center;
+}
+
+.field {
+  min-width: 50%;
+}
