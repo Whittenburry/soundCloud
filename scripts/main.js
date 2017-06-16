@@ -1,25 +1,25 @@
 // https://developers.soundcloud.com/docs/api/reference#users
 // 123333 - stray-hound
-
+// URL for an artist http://api.soundcloud.com/users/stray-hound/?client_id=095fe1dcd09eb3d0e1d3d89c76f5618f
 // URL for an artist's tracks http://api.soundcloud.com/users/52955/tracks?client_id=095fe1dcd09eb3d0e1d3d89c76f5618f
 const API_KEY = "?client_id=095fe1dcd09eb3d0e1d3d89c76f5618f";
 const URL_USER_SEARCH = "http://api.soundcloud.com/users/";
 
 var mainDiv = document.querySelector(".main");
 var searchInput = "";
-var results = "";
-var btn = document.querySelector("#submit");
-var input = document.querySelector("#input");
-btn.addEventListener("click", getSearchInput);
-input.addEventListener("keypress", function(e) {
+var userURL = "";
+var userObj;
+var userID = "";
+var searchBtn = document.querySelector("#submit");
+var searchInput = document.querySelector("#input");
+searchBtn.addEventListener("click", function(e) {
+  getSearchInput();
+  executeUserSearch(userURL);
+});
+searchInput.addEventListener("keypress", function(e) {
   if (e.which == 13) {
-    event.preventDefault();
-    var input = document.querySelector(".search");
-    searchInput = input.value;
-    console.log("searchInput: ", searchInput);
-    results = URL_USER_SEARCH + searchInput + API_KEY;
-    input.value = "";
-    executeSearch(results);
+    getSearchInput();
+    executeUserSearch(userURL);
   }
 });
 
@@ -27,21 +27,24 @@ function getSearchInput() {
   event.preventDefault();
   var input = document.querySelector(".search");
   searchInput = input.value;
-  console.log("searchInput: ", searchInput);
-  results = URL_USER_SEARCH + searchInput + API_KEY;
+  userURL = URL_USER_SEARCH + searchInput + API_KEY;
   input.value = "";
-  executeSearch(results);
 }
 
-console.log("results: ", results);
-
-function executeSearch(url) {
+function executeUserSearch(url) {
   axios
     .get(url)
     .then(function(response) {
-      console.log(response.data);
+      console.log("AXIOS RESPONSE DATA", response.data);
+      userObj = response.data;
+      getUserID(userObj);
     })
     .catch(function(error) {
       console.log("ERROR: ", error);
     });
+}
+
+function getUserID(userObj) {
+  userID = userObj.id;
+  console.log("userID: ", userID);
 }
