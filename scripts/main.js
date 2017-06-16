@@ -94,6 +94,5 @@ function populateHTML() {
 
     newColumnContainer.appendChild(newColumn);
   }
-
   mainDiv.appendChild(newColumnContainer);
 }
