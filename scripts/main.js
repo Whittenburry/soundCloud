@@ -39,60 +39,69 @@ function executeUserSearch(url) {
   axios
     .get(url)
     .then(function(response) {
-      console.log("AXIOS RESPONSE DATA", response.data);
-      userObj = response.data;
-      getUserID(userObj);
+      userID = response.data.id;
       executeTrackSearchFromUserID(userID);
     })
-    .catch(function(error) {
-      console.log("ERROR: ", error);
-    });
-}
-
-function getUserID(userObj) {
-  userID = userObj.id;
-  console.log("userID: ", userID);
+    .catch(function(error) {});
 }
 
 function executeTrackSearchFromUserID(id) {
   let trackSearchURL = URL_BASE + id + "/tracks" + API_KEY;
   axios.get(trackSearchURL).then(function(response) {
     userTracksObj = response.data;
-    console.log("TRACK RESPONSE DATA", response.data);
-    populateHTML();
+
+    populateHTML(4);
   });
 }
 
-function populateHTML() {
-  let newColumnContainer = document.createElement("div");
-  newColumnContainer.classList.add("columns");
+function populateHTML(row_limit) {
+  let currentIndex = 0;
+  let counter = userTracksObj.length / row_limit;
 
-  for (var i = 0; i < userTracksObj.length; i++) {
-    let newColumn = document.createElement("div");
-    newColumn.classList.add("column");
+  //do this as many times as i need to finish object
+  for (var i = 0; i < counter; i++) {
+    let newColumnContainer = document.createElement("div");
+    newColumnContainer.classList.add("columns");
 
-    let trackObj = userTracksObj[i];
-    let artworkURL = trackObj.artwork_url;
-    let title = trackObj.title;
-    let description = trackObj.description;
-    let artist = trackObj.user.username;
+    for (var k = 0; k < row_limit; k++) {
+      var newColumn = document.createElement("div");
 
-    let img = document.createElement("img");
-    let div2 = document.createElement("div");
-    let div3 = document.createElement("div");
-    let div4 = document.createElement("div");
+      updateColumn(newColumn, currentIndex);
 
-    img.src = artworkURL;
-    div2.innerHTML = title;
-    div3.innerHTML = description;
-    div4.innerHTML = artist;
-
-    newColumn.appendChild(img);
-    newColumn.appendChild(div2);
-    newColumn.appendChild(div3);
-    newColumn.appendChild(div4);
-
-    newColumnContainer.appendChild(newColumn);
+      newColumnContainer.appendChild(newColumn);
+      if (currentIndex < counterMax - 1) {
+        currentIndex++;
+      } else {
+        var breakout = true;
+        break;
+      }
+    }
+    mainDiv.appendChild(newColumnContainer);
   }
-  mainDiv.appendChild(newColumnContainer);
+}
+
+function updateColumn(newColumn, currentIndex) {
+  newColumn.classList.add("column");
+
+  let trackObj = userTracksObj[currentIndex]; //figure out correct index here
+
+  let artworkURL = trackObj.artwork_url;
+  let title = trackObj.title;
+  let description = trackObj.description;
+  let artist = trackObj.user.username;
+
+  let img = document.createElement("img");
+  let div2 = document.createElement("div");
+  let div3 = document.createElement("div");
+  let div4 = document.createElement("div");
+
+  img.src = artworkURL;
+  div2.innerHTML = title;
+  div3.innerHTML = description;
+  div4.innerHTML = artist;
+
+  newColumn.appendChild(img);
+  newColumn.appendChild(div2);
+  newColumn.appendChild(div3);
+  newColumn.appendChild(div4);
 }
